@@ -6,13 +6,23 @@ export const Intro: React.FC = () => {
   const isInView = useInView(ref, { once: true, margin: "-20%" });
 
   return (
-    <section 
-      id="story" 
+    <section
+      id="story"
       ref={ref}
-      className="py-40 md:py-64 px-6 md:px-12 w-full flex justify-center items-center bg-stone-950"
+      className="py-40 md:py-64 px-6 md:px-12 w-full flex justify-center items-center bg-stone-950 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto text-center">
-        <motion.p 
+      {/* Background Image - Abstract Smoke/Ink */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <img
+          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop"
+          alt="Abstract Smoke"
+          className="w-full h-full object-cover grayscale mix-blend-overlay"
+        />
+        <div className="absolute inset-0 bg-stone-950/40" />
+      </div>
+
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <motion.p
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
@@ -20,7 +30,7 @@ export const Intro: React.FC = () => {
         >
           "Cocina de autor inspirada en la <span className="text-white italic font-normal">oscuridad</span> y el <span className="text-white italic font-normal">silencio</span>."
         </motion.p>
-        
+
         <motion.div
           initial={{ scaleX: 0 }}
           animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}

@@ -10,27 +10,27 @@ if (apiKey) {
 
 export const getConciergeResponse = async (userPrompt: string): Promise<string> => {
   if (!ai) {
-    // Graceful fallback if no API key is present for demo purposes
+    // Graceful fallback if no API key is present
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve("I apologize, but I am currently offline. Please contact the front desk for immediate assistance.");
+        resolve("Mis disculpas. Aún no estoy conectado a la red neuronal central. Por favor, consulte con la recepción para obtener una llave de acceso.");
       }, 1000);
     });
   }
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.0-flash-exp', // Updated to latest flash model
       contents: userPrompt,
       config: {
-        systemInstruction: "You are 'Noir', an AI Concierge for a high-end luxury restaurant called 'NOIR DINING'. Your tone is sophisticated, elegant, slightly mysterious, and extremely helpful. You help guests choose dishes, wine pairings, or understand the ambiance. Keep responses concise (under 50 words) and polished.",
-        thinkingConfig: { thinkingBudget: 0 } // Disable thinking for faster chat response
+        systemInstruction: "Eres 'Noir', un Concierge de IA para un restaurante de lujo llamado 'NOIR DINING'. Tu tono es sofisticado, elegante, misterioso y extremadamente servicial. Ayudas a los invitados a elegir platos, maridajes de vinos o entender el ambiente. Mantén las respuestas concisas (menos de 50 palabras) y pulidas. Responde siempre en el idioma que te hablen, preferiblemente Español si el usuario inicia en Español.",
+        thinkingConfig: { thinkingBudget: 0 }
       }
     });
-    
-    return response.text || "I am unable to process that request at the moment.";
+
+    return response.text || "No he podido descifrar su solicitud. ¿Podría reformularla?";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Our concierge service is momentarily unavailable.";
+    return "Mis disculpas. La conexión con la bodega subterránea es inestable. Por favor, para asistencia inmediata, llame a recepción.";
   }
 };

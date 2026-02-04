@@ -7,11 +7,11 @@ export const Footer: React.FC = () => {
         <div className="text-center md:text-left">
           <h3 className="font-cinzel text-2xl text-stone-200 tracking-widest">NOIR</h3>
         </div>
-        
+
         <div className="flex gap-8 text-stone-500 font-body text-xs tracking-widest uppercase">
           <a href="#" className="hover:text-stone-300 transition-colors">Instagram</a>
-          <a href="#" className="hover:text-stone-300 transition-colors">Privacy</a>
-          <a href="#" className="hover:text-stone-300 transition-colors">Reserve</a>
+          <a href="#" className="hover:text-stone-300 transition-colors">Privacidad</a>
+          <a href="#" className="hover:text-stone-300 transition-colors">Reservas</a>
         </div>
 
         <div className="text-stone-600 font-body text-xs tracking-widest">

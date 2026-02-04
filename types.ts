@@ -4,7 +4,8 @@ export interface MenuItem {
   description: string;
   price: string;
   image?: string;
-  category: 'starter' | 'main' | 'dessert' | 'cocktail';
+  category: 'starter' | 'main' | 'dessert' | 'cocktail' | 'entrada' | 'principal' | 'postre' | 'Appetizers' | 'Main Courses' | 'From the Fire' | 'Desserts' | 'Cocktails';
+  tags?: ('plant-based' | 'gluten-free' | 'signature')[];
 }
 
 export interface ConciergeMessage {

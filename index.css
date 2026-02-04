@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-noir: #0c0a09;
+  /* stone-950 */
+  --text-gold: #d6bda0;
+}
+
+body {
+  @apply bg-stone-950 text-stone-200 font-body overflow-x-hidden;
+}
+
+/* Hide Scrollbar Standard & Firefox */
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Hide Scrollbar Chrome/Safari/Webkit */
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Selection Color */
+::selection {
+  background: #d6bda0;
+  /* Goldish */
+  color: #0c0a09;
+}
+
+/* Utility for hiding scrollbar in specific containers if needed */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
