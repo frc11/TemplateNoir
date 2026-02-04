@@ -1,0 +1,119 @@
+import React, { useState, useEffect } from 'react';
+import { motion, useMotionValue, useSpring, useMotionTemplate, animate } from 'framer-motion';
+
+export const SignatureDish: React.FC = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Mouse coordinates
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Pulse animation value
+  const radius = useMotionValue(250);
+
+  // Smooth physics for the spotlight - Tuned for high responsiveness (Low mass, high stiffness)
+  // This ensures the spotlight tracks the mouse very closely even on fast movements
+  const springConfig = { damping: 35, stiffness: 700, mass: 0.1 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+  
+  useEffect(() => {
+    // Subtle breathing/pulsing animation for the spotlight radius
+    const controls = animate(radius, [250, 280, 250], {
+      duration: 4,
+      ease: "easeInOut",
+      repeat: Infinity,
+    });
+    return controls.stop;
+  }, [radius]);
+
+  // Dynamic mask template
+  // The mask reveals the content where the radial gradient is opaque (black)
+  // and hides it where transparent.
+  const maskImage = useMotionTemplate`radial-gradient(circle ${radius}px at ${smoothX}px ${smoothY}px, black 15%, transparent 85%)`;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY, currentTarget } = e;
+    const bounds = currentTarget.getBoundingClientRect();
+    
+    // Calculate relative position within the section
+    mouseX.set(clientX - bounds.left);
+    mouseY.set(clientY - bounds.top);
+  };
+
+  // Set initial position to center on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      mouseX.set(window.innerWidth / 2);
+      mouseY.set(window.innerHeight / 2);
+    }
+  }, [mouseX, mouseY]);
+
+  return (
+    <section 
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative w-full h-screen bg-stone-950 overflow-hidden flex items-center justify-center cursor-none"
+    >
+      {/* 1. Base Layer: Ghost Image (Always visible but very faint/grayscale) */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1549416878-b9ca95255263?q=80&w=2400&auto=format&fit=crop" 
+          alt="Signature Dish Ghost" 
+          className="w-full h-full object-cover opacity-10 grayscale filter blur-sm scale-105"
+        />
+      </div>
+
+      {/* 2. Reveal Layer: Full Color Image (Masked by spotlight) */}
+      <motion.div 
+        className="absolute inset-0 z-10"
+        style={{ 
+          maskImage, 
+          WebkitMaskImage: maskImage 
+        }}
+      >
+        <img 
+          src="https://images.unsplash.com/photo-1549416878-b9ca95255263?q=80&w=2400&auto=format&fit=crop" 
+          alt="Signature Dish Revealed" 
+          className="w-full h-full object-cover scale-105"
+        />
+      </motion.div>
+
+      {/* 3. Text Overlay (Pointer events none to allow mouse through) */}
+      <div className="relative z-20 pointer-events-none text-center mix-blend-difference">
+        <motion.span 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+          className="block font-body text-xs tracking-[0.5em] text-stone-400 uppercase mb-4"
+        >
+          The Signature
+        </motion.span>
+        
+        <motion.h2 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: [0.2, 0.8, 0.2, 1] }}
+          className="font-display italic text-6xl md:text-8xl text-stone-200 leading-none"
+        >
+          Venison <br/> & Ashes
+        </motion.h2>
+
+        <motion.p
+          animate={{ opacity: isHovered ? 0 : 1 }}
+          transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+          className="absolute left-1/2 -translate-x-1/2 mt-32 font-body text-[10px] uppercase tracking-widest text-stone-500 whitespace-nowrap"
+        >
+          [ Move to Explore ]
+        </motion.p>
+      </div>
+
+      {/* 4. Custom Cursor Follower (Optional visual cue) */}
+      <motion.div
+        style={{ x: smoothX, y: smoothY }}
+        className="absolute top-0 left-0 w-4 h-4 -ml-2 -mt-2 bg-white rounded-full mix-blend-overlay z-30 pointer-events-none blur-[1px]"
+      />
+    </section>
+  );
+};
