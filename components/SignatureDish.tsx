@@ -1,9 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useMotionTemplate, animate } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useSpring, useMotionTemplate, animate, useScroll, useTransform } from 'framer-motion';
 
 export const SignatureDish: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Parallax: Section reference for scroll tracking
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Parallax: Scroll progress tracking
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Parallax: Transform values for depth effect
+  // Ghost image moves slower (creates distance)
+  const ghostY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  // Text moves slightly faster/opposite for separation
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
 
   // Mouse coordinates
   const mouseX = useMotionValue(0);
@@ -92,19 +107,23 @@ export const SignatureDish: React.FC = () => {
 
   return (
     <section
+      ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative w-full h-screen bg-stone-950 overflow-hidden flex items-center justify-center cursor-none"
     >
-      {/* 1. Base Layer: Ghost Image (Always visible but faint) */}
-      <div className="absolute inset-0 z-0">
+      {/* 1. Base Layer: Ghost Image (Always visible but faint) - WITH PARALLAX */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{ y: ghostY }}
+      >
         <img
           src="https://images.unsplash.com/photo-1549416878-b9ca95255263?q=80&w=2400&auto=format&fit=crop"
           alt="Signature Dish Ghost"
-          className={`w-full h-full object-cover grayscale filter blur-sm scale-105 transition-opacity duration-500 ${isMobile ? 'opacity-20' : 'opacity-10'}`}
+          className={`w-full h-full object-cover grayscale filter blur-sm scale-110 transition-opacity duration-500 ${isMobile ? 'opacity-20' : 'opacity-10'}`}
         />
-      </div>
+      </motion.div>
 
       {/* 2. Reveal Layer: Full Color Image (Masked by spotlight) */}
       <motion.div
@@ -121,8 +140,11 @@ export const SignatureDish: React.FC = () => {
         />
       </motion.div>
 
-      {/* 3. Text Overlay (Pointer events none to allow mouse through) */}
-      <div className="relative z-20 pointer-events-none text-center mix-blend-difference">
+      {/* 3. Text Overlay (Pointer events none to allow mouse through) - WITH PARALLAX */}
+      <motion.div
+        className="relative z-20 pointer-events-none text-center mix-blend-difference"
+        style={{ y: textY }}
+      >
         <motion.span
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -150,7 +172,7 @@ export const SignatureDish: React.FC = () => {
             [ Move to Explore ]
           </motion.p>
         )}
-      </div>
+      </motion.div>
 
       {/* 4. Custom Cursor Follower (Optional visual cue) - Only on Desktop */}
       {!isMobile && (

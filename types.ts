@@ -8,8 +8,4 @@ export interface MenuItem {
   tags?: ('plant-based' | 'gluten-free' | 'signature')[];
 }
 
-export interface ConciergeMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  text: string;
-}
+

@@ -33,11 +33,18 @@ body::-webkit-scrollbar {
 }
 
 /* Utility for hiding scrollbar in specific containers if needed */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Global Focus Styles for Accessibility */
+:focus-visible {
+  outline: 2px solid #b45309;
+  /* amber-700 */
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
 }

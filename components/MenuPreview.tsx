@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 import { MenuItem } from '../types';
 import { FullMenu } from './FullMenu';
 
@@ -34,15 +35,27 @@ const MENU_ITEMS: MenuItem[] = [
 
 export const MenuPreview: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Lock body scroll when menu is open
+  // Lock body scroll when menu or lightbox is open
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen || selectedImage) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [isMenuOpen]);
+  }, [isMenuOpen, selectedImage]);
+
+  // ESC key to close lightbox
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedImage) {
+        setSelectedImage(null);
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedImage]);
 
   return (
     <section id="menu" className="py-24 bg-stone-950 relative w-full overflow-hidden">
@@ -67,7 +80,12 @@ export const MenuPreview: React.FC = () => {
 
         <div className="flex flex-col gap-32 md:gap-48 mb-32">
           {MENU_ITEMS.map((item, index) => (
-            <DishGalleryItem key={item.id} item={item} index={index} />
+            <DishGalleryItem
+              key={item.id}
+              item={item}
+              index={index}
+              onImageClick={setSelectedImage}
+            />
           ))}
         </div>
 
@@ -75,10 +93,10 @@ export const MenuPreview: React.FC = () => {
         <div className="flex justify-center">
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="group relative px-10 py-4 bg-transparent border border-stone-800 hover:bg-stone-900 transition-colors duration-500 overflow-hidden"
+            className="group relative px-10 py-5 bg-transparent border border-stone-700 hover:bg-stone-900 transition-colors duration-500 overflow-hidden"
           >
-            <span className="relative z-10 font-body text-xs tracking-[0.25em] text-stone-400 group-hover:text-stone-200 transition-colors uppercase">
-              Explorar Carta Completa
+            <span className="relative z-10 font-body text-xs tracking-widest font-bold text-stone-300 group-hover:text-white transition-colors uppercase">
+              Ver Carta Completa
             </span>
           </button>
         </div>
@@ -87,11 +105,50 @@ export const MenuPreview: React.FC = () => {
 
 
       <FullMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
+      {/* Lightbox Overlay */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] bg-stone-950/95 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="fixed top-6 right-6 z-[110] p-2 text-stone-400 hover:text-white transition-colors duration-300 mix-blend-difference"
+              aria-label="Close lightbox"
+            >
+              <X size={32} strokeWidth={1} />
+            </button>
+
+            {/* Image */}
+            <motion.img
+              src={selectedImage}
+              alt="Dish detail"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-[90vh] max-w-[90vw] object-contain cursor-default shadow-2xl"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section >
   );
 };
 
-const DishGalleryItem: React.FC<{ item: MenuItem; index: number }> = ({ item, index }) => {
+const DishGalleryItem: React.FC<{
+  item: MenuItem;
+  index: number;
+  onImageClick: (image: string) => void;
+}> = ({ item, index, onImageClick }) => {
   const isEven = index % 2 === 0;
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-20%" });
@@ -130,7 +187,10 @@ const DishGalleryItem: React.FC<{ item: MenuItem; index: number }> = ({ item, in
       </div>
 
       {/* Image Section - The "WOW" Mask */}
-      <div className="w-full md:w-7/12 aspect-[4/5] md:aspect-[3/4] relative group cursor-none">
+      <div
+        onClick={() => onImageClick(item.image)}
+        className="w-full md:w-7/12 aspect-[4/5] md:aspect-[3/4] relative group cursor-zoom-in"
+      >
         <motion.div
           className="w-full h-full overflow-hidden relative"
           initial={{ opacity: 0 }}

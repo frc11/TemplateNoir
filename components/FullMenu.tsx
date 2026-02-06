@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronDown } from 'lucide-react';
 import { MENU_DATA, MENU_CATEGORIES } from '../src/data/menuData';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 interface FullMenuProps {
     isOpen: boolean;
@@ -24,6 +25,21 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
     const [activeFilter, setActiveFilter] = useState<FilterType>('all');
     const scrollRef = useRef<HTMLDivElement>(null);
     const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+
+    // Accessibility: Focus Trap
+    const containerRef = useFocusTrap(isOpen);
+
+    // ESC Key Handler
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && isOpen) {
+                onClose();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
 
     // Handle Scroll Indicator Visibility with standard scroll events
     useEffect(() => {
@@ -109,11 +125,13 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    ref={containerRef}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-                    className="fixed inset-0 z-50 bg-stone-950 flex flex-col md:flex-row h-screen"
+                    className="fixed inset-0 z-50 bg-stone-950 flex flex-col md:flex-row h-screen outline-none"
+                    tabIndex={-1}
                 >
                     {/* Close Button - Fixed */}
                     <button
@@ -231,7 +249,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                             <div className="mt-24 pt-12 border-t border-stone-900 text-center md:text-left">
                                 <p className="font-body text-stone-700 text-xs tracking-widest uppercase">
                                     * Ingredientes orgánicos y de origen local cuando es posible.<br />
-                                    * Por favor informe cualquier alergia al Concierge.
+                                    * Por favor informe cualquier alergia al personal.
                                 </p>
                             </div>
                         </div>

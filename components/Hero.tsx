@@ -84,6 +84,25 @@ export const Hero: React.FC = () => {
         >
           SABOREA <br className="md:hidden" /> EL VACÍO
         </motion.h1>
+
+        {/* CTA Button */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1.0,
+            delay: 2.8,
+            ease: [0.2, 0.8, 0.2, 1]
+          }}
+          onClick={() => {
+            document.getElementById('reservations')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="mt-12 group relative px-8 py-3 bg-transparent border border-white/30 hover:border-amber-900/50 hover:bg-amber-900/20 transition-all duration-500 rounded-sm"
+        >
+          <span className="font-body text-[10px] md:text-xs tracking-[0.3em] text-stone-300 group-hover:text-amber-100 uppercase transition-colors">
+            Reservar Mesa
+          </span>
+        </motion.button>
       </motion.div>
 
       {/* Scroll Indicator */}
@@ -96,6 +115,6 @@ export const Hero: React.FC = () => {
         <span className="text-[10px] tracking-[0.3em] text-stone-500 uppercase font-body">Desliza</span>
         <div className="w-[1px] h-16 bg-gradient-to-b from-stone-500 to-transparent opacity-50" />
       </motion.div>
-    </section>
+    </section >
   );
 };

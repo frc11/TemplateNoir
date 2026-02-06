@@ -19,15 +19,26 @@ export const Location: React.FC = () => {
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30596073366!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1647043276541!5m2!1sen!2s"
             width="100%"
             height="100%"
-            style={{ border: 0, filter: 'grayscale(100%) invert(92%) contrast(83%)' }}
+            style={{
+              border: 0,
+              filter: 'grayscale(100%) invert(100%) contrast(90%) brightness(95%) hue-rotate(180deg)'
+            }}
             allowFullScreen
             loading="lazy"
             title="Noir Location"
           />
 
-          {/* Custom Marker Overlay */}
+          {/* Tactical Marker with Ripple Effect */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <div className="w-4 h-4 bg-stone-200 rotate-45 border border-stone-950 animate-pulse" />
+            {/* Ripple Animation */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-amber-700/20 rounded-full animate-ping" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-amber-700/10 rounded-full animate-ping [animation-delay:0.5s]" />
+
+            {/* Pin Marker */}
+            <div className="relative w-5 h-5 bg-amber-700 rotate-45 border-2 border-stone-950 shadow-[0_0_20px_rgba(180,83,9,0.6)] animate-pulse">
+              {/* Inner Glow */}
+              <div className="absolute inset-1 bg-amber-400 rotate-0" />
+            </div>
           </div>
         </motion.div>
 
