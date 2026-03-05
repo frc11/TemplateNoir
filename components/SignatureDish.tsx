@@ -89,12 +89,10 @@ export const SignatureDish: React.FC = () => {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile) return; // Ignore mouse if mobile (though touch events might trigger it, best to be safe)
 
-    const { clientX, clientY, currentTarget } = e;
-    const bounds = currentTarget.getBoundingClientRect();
-
-    // Calculate relative position within the section
-    mouseX.set(clientX - bounds.left);
-    mouseY.set(clientY - bounds.top);
+    // Using nativeEvent offset for accurate tracking relative to the element,
+    // avoiding scroll offset bugs with getBoundingClientRect()
+    mouseX.set(e.nativeEvent.offsetX);
+    mouseY.set(e.nativeEvent.offsetY);
   };
 
   // Set initial position to center on mount
@@ -119,7 +117,7 @@ export const SignatureDish: React.FC = () => {
         style={{ y: ghostY }}
       >
         <img
-          src="https://images.unsplash.com/photo-1549416878-b9ca95255263?q=80&w=2400&auto=format&fit=crop"
+          src="/venison_ashes.png"
           alt="Signature Dish Ghost"
           className={`w-full h-full object-cover grayscale filter blur-sm scale-110 transition-opacity duration-500 ${isMobile ? 'opacity-20' : 'opacity-10'}`}
         />
@@ -134,7 +132,7 @@ export const SignatureDish: React.FC = () => {
         }}
       >
         <img
-          src="https://images.unsplash.com/photo-1549416878-b9ca95255263?q=80&w=2400&auto=format&fit=crop"
+          src="/venison_ashes.png"
           alt="Signature Dish Revealed"
           className="w-full h-full object-cover scale-105"
         />
@@ -177,6 +175,7 @@ export const SignatureDish: React.FC = () => {
       {/* 4. Custom Cursor Follower (Optional visual cue) - Only on Desktop */}
       {!isMobile && (
         <motion.div
+          animate={{ opacity: isHovered ? 1 : 0 }}
           style={{ x: smoothX, y: smoothY }}
           className="absolute top-0 left-0 w-4 h-4 -ml-2 -mt-2 bg-white rounded-full mix-blend-overlay z-30 pointer-events-none blur-[1px]"
         />

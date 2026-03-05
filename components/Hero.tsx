@@ -27,20 +27,14 @@ export const Hero: React.FC = () => {
         style={{ y: backgroundY }}
         className="absolute inset-0 w-full h-[120%] z-0 bg-stone-900"
       >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1200&auto=format&fit=crop"
+        <img
+          src="/hero-bg.png"
+          alt="Noir Dining Hero"
           className="absolute inset-0 w-full h-full object-cover opacity-60"
-        >
-          {/* Abstract ink swirling video to match the noir/luxury aesthetic */}
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-ink-swirling-in-water-336-large.mp4" type="video/mp4" />
-        </video>
+        />
 
         {/* Gradient Overlay for Text Visibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-stone-950/60 via-stone-900/20 to-stone-950/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-950/60 via-stone-900/40 to-stone-950/90" />
 
         {/* Grain Texture Overlay */}
         <div className="absolute inset-0 opacity-[0.07] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiLz4KPC9zdmc+')] mix-blend-overlay" />

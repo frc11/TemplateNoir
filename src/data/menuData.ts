@@ -82,7 +82,7 @@ export const MENU_DATA: MenuItem[] = [
         description: '150g de Wagyu japonés, sal de mar ahumada y mantequilla de trufa negra.',
         price: '120',
         category: 'From the Fire',
-        image: 'https://images.unsplash.com/photo-1643906662497-6a165b4528c7?q=80&w=1200&auto=format&fit=crop',
+        image: '/wagyu.png',
         tags: ['signature', 'gluten-free']
     },
     {

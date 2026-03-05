@@ -11,7 +11,7 @@ const MENU_ITEMS: MenuItem[] = [
     description: 'Tartar de Wagyu A5 ahumado, emulsión de ajo negro y cracker de carbón. Servido en absoluto silencio.',
     price: '42',
     category: 'entrada',
-    image: 'https://images.unsplash.com/photo-1643906662497-6a165b4528c7?q=80&w=1200&auto=format&fit=crop'
+    image: '/wagyu.png'
   },
   {
     id: '2',
@@ -27,7 +27,7 @@ const MENU_ITEMS: MenuItem[] = [
     description: 'Ganache de chocolate 70% en coraza de trufa, cristales de sal marina y un susurro de aceite de trufa.',
     price: '28',
     category: 'postre',
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476d?q=80&w=1200&auto=format&fit=crop'
+    image: '/obsidian_truffle.png'
   }
 ];
 
