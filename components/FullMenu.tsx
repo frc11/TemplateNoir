@@ -24,6 +24,8 @@ const FILTERS: { label: string; value: FilterType }[] = [
 export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
     const [mounted, setMounted] = useState(false);
     const [activeImage, setActiveImage] = useState<string>(DEFAULT_IMAGE);
+    const [expandedMobileId, setExpandedMobileId] = useState<string | null>(null);
+    const [zoomedImage, setZoomedImage] = useState<string | null>(null);
     const [activeFilter, setActiveFilter] = useState<FilterType>('all');
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +40,10 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
     // ESC Key Handler
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (zoomedImage) {
+                if (event.key === 'Escape') setZoomedImage(null);
+                return;
+            }
             if (event.key === 'Escape' && isOpen) {
                 onClose();
             }
@@ -45,7 +51,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen, onClose]);
+    }, [isOpen, onClose, zoomedImage]);
 
     // Handle Scroll Indicator Visibility with standard scroll events
     useEffect(() => {
@@ -74,14 +80,18 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
             document.body.style.overflow = 'hidden';
             setShowScrollIndicator(true);
             setActiveFilter('all');
+            setExpandedMobileId(null);
+            setZoomedImage(null);
         } else {
             document.body.style.overflow = 'unset';
             setActiveImage(DEFAULT_IMAGE);
+            setExpandedMobileId(null);
+            setZoomedImage(null);
         }
     }, [isOpen]);
 
     const handleMouseEnter = (image: string | undefined) => {
-        if (image) setActiveImage(image);
+        if (image && window.innerWidth >= 768) setActiveImage(image);
     };
 
     const handleMouseLeave = () => {
@@ -145,7 +155,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                         className="w-full md:w-[45%] h-full overflow-y-auto relative z-10 bg-stone-950/95 backdrop-blur-md md:bg-stone-950 
                        [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
                     >
-                        {/* Close Button - Moved to the right edge of this column */}
+                        {/* Close Button */}
                         <button
                             onClick={onClose}
                             className="absolute top-6 right-6 z-[60] p-2 text-stone-500 hover:text-white transition-colors duration-300"
@@ -218,7 +228,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                     animate="show"
                                                     className="space-y-8"
                                                 >
-                                                    <AnimatePresence mode="popLayout">
+                                                    <AnimatePresence mode="sync">
                                                         {categoryItems.map((item) => (
                                                             <motion.div
                                                                 key={item.id}
@@ -227,12 +237,17 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                 initial="hidden"
                                                                 animate="show"
                                                                 exit="exit"
+                                                                onClick={() => {
+                                                                    if (window.innerWidth < 768) {
+                                                                        setExpandedMobileId(expandedMobileId === item.id ? null : item.id);
+                                                                    }
+                                                                }}
                                                                 onMouseEnter={() => handleMouseEnter(item.image)}
                                                                 onMouseLeave={handleMouseLeave}
-                                                                className="group cursor-default relative pl-4 border-l-2 border-transparent hover:border-amber-900/50 transition-all duration-300"
+                                                                className="group cursor-pointer md:cursor-default relative pl-4 border-l-2 border-transparent hover:border-amber-900/50 transition-all duration-300"
                                                             >
-                                                                <div className="flex justify-between items-baseline mb-2">
-                                                                    <h4 className="font-display text-xl md:text-2xl text-stone-400 group-hover:text-stone-100 transition-colors duration-300">
+                                                                <div className="flex justify-between items-baseline mb-2 text-stone-400 group-hover:text-stone-100 transition-colors duration-300">
+                                                                    <h4 className="font-display text-xl md:text-2xl">
                                                                         {item.name}
                                                                     </h4>
                                                                     <span className="font-cinzel text-stone-600 text-sm group-hover:text-amber-700/80 transition-colors">
@@ -242,6 +257,29 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                 <p className="font-body text-stone-600 text-sm font-light leading-relaxed max-w-[90%] group-hover:text-stone-400 transition-colors duration-300">
                                                                     {item.description}
                                                                 </p>
+
+                                                                {/* Mobile Image Expansion */}
+                                                                <AnimatePresence>
+                                                                    {expandedMobileId === item.id && item.image && (
+                                                                        <motion.div
+                                                                            initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                                                                            animate={{ height: "auto", opacity: 1, marginTop: "1rem" }}
+                                                                            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                                                                            transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+                                                                            className="md:hidden overflow-hidden w-full flex justify-center"
+                                                                        >
+                                                                            <img
+                                                                                src={item.image}
+                                                                                alt={item.name}
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    setZoomedImage(item.image!);
+                                                                                }}
+                                                                                className="w-full max-h-48 object-cover rounded-sm cursor-zoom-in shadow-xl shadow-stone-950/50"
+                                                                            />
+                                                                        </motion.div>
+                                                                    )}
+                                                                </AnimatePresence>
                                                             </motion.div>
                                                         ))}
                                                     </AnimatePresence>
@@ -299,6 +337,36 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                             style={{ backgroundImage: 'url(https://grainy-gradients.vercel.app/noise.svg)' }}
                         />
                     </div>
+
+                    {/* Zoom Modal Overlay */}
+                    <AnimatePresence>
+                        {zoomedImage && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setZoomedImage(null)}
+                                className="fixed inset-0 z-[1000] bg-stone-950/95 backdrop-blur-lg flex items-center justify-center p-4 cursor-zoom-out"
+                            >
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); setZoomedImage(null); }}
+                                    className="absolute top-6 right-6 z-[1001] p-2 text-stone-400 hover:text-white transition-colors"
+                                >
+                                    <X size={32} />
+                                </button>
+                                <motion.img
+                                    initial={{ scale: 0.9, y: 20 }}
+                                    animate={{ scale: 1, y: 0 }}
+                                    exit={{ scale: 0.9, y: 20 }}
+                                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                                    src={zoomedImage}
+                                    alt="Zoomed"
+                                    onClick={(e) => e.stopPropagation()} // Prevent closing if they click the image itself, though clicking around it closes it
+                                    className="w-full max-w-4xl max-h-[85vh] object-contain rounded-md shadow-2xl"
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </motion.div>
             )}
         </AnimatePresence>

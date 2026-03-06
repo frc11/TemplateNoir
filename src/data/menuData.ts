@@ -36,7 +36,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Esfera de foie gras micuit cubierta de avellanas tostadas y oro comestible.',
         price: '32',
         category: 'Appetizers',
-        image: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop' // keeping a premium meat/bone marrow look as a placeholder or using a dark truffle look:
+        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop' // healthy/premium bowl or distinct dish
     },
 
     // Main Courses
@@ -153,7 +153,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Vodka negro, licor de café, espresso, humo de canela.',
         price: '18',
         category: 'Cocktails',
-        image: 'https://images.unsplash.com/photo-1601002242099-e68598a3e791?q=80&w=1200&auto=format&fit=crop'
+        image: '/the_void_cocktail.png'
     },
     {
         id: 'cocktail-2',
@@ -177,6 +177,6 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Gin infusionado en moras, tónica premium, twist de limón quemado.',
         price: '18',
         category: 'Cocktails',
-        image: 'https://images.unsplash.com/photo-1541336113840-3ee920194095?q=80&w=1200&auto=format&fit=crop'
+        image: '/midnight_gin_cocktail.png'
     }
 ];
