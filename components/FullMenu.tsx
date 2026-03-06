@@ -21,6 +21,30 @@ const FILTERS: { label: string; value: FilterType }[] = [
     { label: 'GLUTEN-FREE', value: 'gluten-free' }
 ];
 
+const MobileImage = ({ src, alt, onClick }: { src: string; alt: string; onClick: (e: React.MouseEvent) => void }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    return (
+        <div className="relative w-full h-48 bg-stone-900/50 rounded-sm overflow-hidden flex items-center justify-center">
+            {/* Loading Spinner - Always centered in the placeholder box */}
+            {!isLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-6 h-6 border-2 border-stone-800 border-t-stone-400 rounded-full animate-spin" />
+                </div>
+            )}
+
+            {/* Actual Image */}
+            <img
+                src={src}
+                alt={alt}
+                onClick={onClick}
+                onLoad={() => setIsLoaded(true)}
+                className={`w-full h-full object-cover cursor-zoom-in shadow-xl shadow-stone-950/50 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+        </div>
+    );
+};
+
 export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
     const [mounted, setMounted] = useState(false);
     const [activeImage, setActiveImage] = useState<string>(DEFAULT_IMAGE);
@@ -275,14 +299,13 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                             transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
                                                                             className="md:hidden overflow-hidden w-full flex justify-center"
                                                                         >
-                                                                            <img
+                                                                            <MobileImage
                                                                                 src={item.image}
                                                                                 alt={item.name}
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
                                                                                     setZoomedImage(item.image!);
                                                                                 }}
-                                                                                className="w-full max-h-48 object-cover rounded-sm cursor-zoom-in shadow-xl shadow-stone-950/50"
                                                                             />
                                                                         </motion.div>
                                                                     )}
