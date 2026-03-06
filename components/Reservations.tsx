@@ -205,7 +205,7 @@ export const Reservations: React.FC = () => {
 
         {/* Decorative background text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none select-none opacity-[0.03]">
-          <span className="font-cinzel text-[15vw] leading-none whitespace-nowrap">BOOKING</span>
+          <span className="font-cinzel text-[15vw] leading-none whitespace-nowrap">RESERVAS</span>
         </div>
 
         <AnimatePresence mode="wait">

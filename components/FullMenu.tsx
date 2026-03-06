@@ -258,6 +258,13 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                     {item.description}
                                                                 </p>
 
+                                                                {/* Mobile Expand Hint */}
+                                                                {item.image && expandedMobileId !== item.id && (
+                                                                    <div className="md:hidden mt-3 text-[9px] text-amber-700/60 uppercase tracking-[0.2em] font-body">
+                                                                        [ Presiona para expandir ]
+                                                                    </div>
+                                                                )}
+
                                                                 {/* Mobile Image Expansion */}
                                                                 <AnimatePresence>
                                                                     {expandedMobileId === item.id && item.image && (

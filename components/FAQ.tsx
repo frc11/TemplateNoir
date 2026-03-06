@@ -51,7 +51,7 @@ export const FAQ: React.FC = () => {
                         Preguntas Frecuentes
                     </span>
                     <h2 className="font-cinzel text-4xl md:text-6xl text-stone-200 tracking-wide">
-                        Frequently Asked Questions
+                        Resuelve tus Dudas
                     </h2>
                 </motion.div>
 

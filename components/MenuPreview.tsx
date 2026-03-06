@@ -19,7 +19,7 @@ const MENU_ITEMS: MenuItem[] = [
     description: 'Arroz Carnaroli teñido en tinta de sepia, vieiras de Hokkaido y polvo de oro comestible para romper la oscuridad.',
     price: '55',
     category: 'principal',
-    image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=1200&auto=format&fit=crop'
+    image: '/midnight_risotto.png'
   },
   {
     id: '3',

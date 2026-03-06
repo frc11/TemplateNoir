@@ -11,21 +11,21 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-8">
             <div>
               <h3 className="font-cinzel text-3xl text-stone-200 tracking-[0.2em] mb-2">NOIR</h3>
-              <p className="font-body text-[10px] text-stone-600 tracking-[0.4em] uppercase">Dining in the Void</p>
+              <p className="font-body text-[10px] text-stone-600 tracking-[0.4em] uppercase">Cenando en el Vacío</p>
             </div>
 
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-3 group">
                 <MapPin size={16} className="text-stone-700 group-hover:text-amber-900 transition-colors mt-0.5" />
                 <p className="font-body text-stone-500 text-sm font-light leading-relaxed max-w-[200px] group-hover:text-stone-300 transition-colors">
-                  Calle del Vacío 123,<br />
-                  Polanco, CDMX
+                  25 de Mayo 432, 5to Piso,<br />
+                  San Miguel de Tucumán
                 </p>
               </div>
               <div className="flex flex-col md:flex-row items-center md:items-start gap-3 group">
                 <Phone size={16} className="text-stone-700 group-hover:text-amber-900 transition-colors mt-0.5" />
                 <p className="font-body text-stone-500 text-sm font-light tracking-wide group-hover:text-stone-300 transition-colors">
-                  +52 (55) 0000-0000
+                  +54 9 381 000-0000
                 </p>
               </div>
             </div>
@@ -55,7 +55,7 @@ export const Footer: React.FC = () => {
           {/* Column 3: Newsletter */}
           <div className="flex flex-col items-center md:items-end text-center md:text-right space-y-8">
             <h4 className="font-body text-stone-400 text-xs tracking-[0.25em] uppercase">
-              Join the Inner Circle
+              Únete al Círculo Exclusivo
             </h4>
             <p className="font-body text-stone-600 text-xs leading-relaxed max-w-[250px]">
               Recibe acceso anticipado a nuestros eventos exclusivos y menús de temporada.
@@ -64,7 +64,7 @@ export const Footer: React.FC = () => {
             <form className="w-full max-w-[250px] relative group" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
-                placeholder="EMAIL ADDRESS"
+                placeholder="CORREO ELECTRÓNICO"
                 className="w-full bg-transparent border-b border-stone-800 py-2 pr-10 text-stone-300 text-xs tracking-widest placeholder:text-stone-700 focus:outline-none focus:border-amber-900/50 transition-colors text-right"
               />
               <button

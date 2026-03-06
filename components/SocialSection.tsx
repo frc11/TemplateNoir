@@ -25,10 +25,10 @@ export const SocialSection: React.FC = () => {
             {/* Section Title */}
             <div className="text-center mb-16 relative z-10 px-4">
                 <h2 className="font-cinzel text-3xl md:text-5xl text-stone-200 tracking-[0.2em] mb-4">
-                    Visual Chronicle
+                    Crónica Visual
                 </h2>
                 <p className="font-body text-stone-500 text-xs tracking-[0.3em] uppercase">
-                    Follow <span className="text-amber-700">@noir.dining</span> into the void
+                    Sigue a <span className="text-amber-700">@noir.dining</span> hacia el vacío
                 </p>
             </div>
 
@@ -77,15 +77,15 @@ export const SocialSection: React.FC = () => {
                             <div className="flex flex-1 justify-around text-white ml-4">
                                 <div className="flex flex-col items-center">
                                     <span className="font-bold text-lg">0</span>
-                                    <span className="text-xs text-stone-400">Posts</span>
+                                    <span className="text-xs text-stone-400">Publicaciones</span>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <span className="font-bold text-lg">24.5K</span>
-                                    <span className="text-xs text-stone-400">Followers</span>
+                                    <span className="text-xs text-stone-400">Seguidores</span>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <span className="font-bold text-lg">1</span>
-                                    <span className="text-xs text-stone-400">Following</span>
+                                    <span className="text-xs text-stone-400">Seguidos</span>
                                 </div>
                             </div>
                         </div>
@@ -94,20 +94,20 @@ export const SocialSection: React.FC = () => {
                         <div className="mb-4">
                             <p className="text-sm text-white font-medium">NOIR Dining</p>
                             <p className="text-sm text-stone-300 font-light leading-tight">
-                                Dining in the void. <br />
-                                By reservation only. <br />
-                                Polanco, CDMX.
+                                Cenando en el vacío. <br />
+                                Solo con reserva. <br />
+                                San Miguel de Tucumán.
                             </p>
-                            <p className="text-xs text-amber-500 mt-1 font-medium">Coming soon...</p>
+                            <p className="text-xs text-amber-500 mt-1 font-medium">Próximamente...</p>
                         </div>
 
                         {/* Action Buttons */}
                         <div className="flex gap-2 mb-6">
                             <button className="flex-1 bg-amber-900 text-white text-sm font-semibold py-1.5 rounded-md hover:bg-amber-800 transition-colors">
-                                Follow
+                                Seguir
                             </button>
                             <button className="flex-1 bg-stone-800 text-white text-sm font-semibold py-1.5 rounded-md hover:bg-stone-700 transition-colors">
-                                Message
+                                Mensaje
                             </button>
                         </div>
 

@@ -149,7 +149,7 @@ export const SignatureDish: React.FC = () => {
           transition={{ duration: 1.2, delay: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
           className="block font-body text-xs tracking-[0.5em] text-stone-400 uppercase mb-4"
         >
-          The Signature
+          La Firma
         </motion.span>
 
         <motion.h2
@@ -167,7 +167,7 @@ export const SignatureDish: React.FC = () => {
             transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
             className="absolute left-1/2 -translate-x-1/2 mt-32 font-body text-[10px] uppercase tracking-widest text-stone-500 whitespace-nowrap"
           >
-            [ Move to Explore ]
+            [ Mueve para Explorar ]
           </motion.p>
         )}
       </motion.div>
