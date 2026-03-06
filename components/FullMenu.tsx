@@ -258,6 +258,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                 key={item.id}
                                                                 layout="position"
                                                                 variants={itemVariants}
+                                                                transition={{ layout: { duration: 0.7, ease: [0.25, 1, 0.5, 1] } }}
                                                                 initial="hidden"
                                                                 animate="show"
                                                                 exit="exit"
@@ -296,7 +297,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                             initial={{ height: 0, opacity: 0, marginTop: 0 }}
                                                                             animate={{ height: "auto", opacity: 1, marginTop: "1rem" }}
                                                                             exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                                                                            transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+                                                                            transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
                                                                             className="md:hidden overflow-hidden w-full flex justify-center"
                                                                         >
                                                                             <MobileImage
