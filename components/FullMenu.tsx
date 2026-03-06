@@ -37,6 +37,7 @@ const MobileImage = ({ src, alt, onClick }: { src: string; alt: string; onClick:
             <img
                 src={src}
                 alt={alt}
+                loading="lazy"
                 onClick={onClick}
                 onLoad={() => setIsLoaded(true)}
                 className={`w-full h-full object-cover cursor-zoom-in shadow-xl shadow-stone-950/50 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -290,24 +291,29 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                                     </div>
                                                                 )}
 
-                                                                {/* Mobile Image Expansion */}
+                                                                {/* Mobile Image Expansion - GPU Accelerated Grid Trick */}
                                                                 <AnimatePresence>
                                                                     {expandedMobileId === item.id && item.image && (
                                                                         <motion.div
-                                                                            initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                                                                            animate={{ height: "auto", opacity: 1, marginTop: "1rem" }}
-                                                                            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                                                                            initial={{ gridTemplateRows: "0fr", opacity: 0, marginTop: 0 }}
+                                                                            animate={{ gridTemplateRows: "1fr", opacity: 1, marginTop: "1rem" }}
+                                                                            exit={{ gridTemplateRows: "0fr", opacity: 0, marginTop: 0 }}
                                                                             transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-                                                                            className="md:hidden overflow-hidden w-full flex justify-center"
+                                                                            className="md:hidden grid w-full"
                                                                         >
-                                                                            <MobileImage
-                                                                                src={item.image}
-                                                                                alt={item.name}
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    setZoomedImage(item.image!);
-                                                                                }}
-                                                                            />
+                                                                            <div className="overflow-hidden flex justify-center w-full">
+                                                                                {/* Pre-allocate space (12rem = h-48) to avoid layout thrashing */}
+                                                                                <div className="w-full min-h-[12rem]">
+                                                                                    <MobileImage
+                                                                                        src={item.image}
+                                                                                        alt={item.name}
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            setZoomedImage(item.image!);
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
                                                                         </motion.div>
                                                                     )}
                                                                 </AnimatePresence>
