@@ -48,3 +48,22 @@ body::-webkit-scrollbar {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* Form Input Overrides */
+/* Hide Number Input Spinners (Arrows) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* Custom Calendar Picker Icon Alignment inside the Noir Theme */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.8) sepia(1) hue-rotate(330deg) saturate(3) brightness(0.9);
+  padding-left: 0.5rem;
+}

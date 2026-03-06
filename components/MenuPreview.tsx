@@ -58,9 +58,9 @@ export const MenuPreview: React.FC = () => {
   }, [selectedImage]);
 
   return (
-    <section id="menu" className="py-24 bg-stone-950 relative w-full overflow-hidden">
+    <section id="menu" className="py-24 bg-stone-950 relative w-full overflow-hidden z-10">
       {/* Background Ambience */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-900/20 via-stone-950 to-stone-950 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-900/20 via-stone-950 to-stone-950 pointer-events-none -z-10" />
 
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12">
         <motion.div

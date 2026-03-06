@@ -34,8 +34,11 @@ export const FAQ: React.FC = () => {
     };
 
     return (
-        <section id="faq" className="py-24 md:py-32 px-6 md:px-12 bg-stone-950 border-t border-stone-900 relative">
-            <div className="max-w-4xl mx-auto">
+        <section id="faq" className="py-24 md:py-32 px-6 md:px-12 bg-stone-950 border-t border-stone-900 relative overflow-hidden">
+            {/* Ambient background glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-950/20 via-stone-950 to-stone-950 pointer-events-none" />
+
+            <div className="max-w-4xl mx-auto relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}

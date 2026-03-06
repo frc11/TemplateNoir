@@ -4,8 +4,11 @@ import { MapPin, Clock, Phone } from 'lucide-react';
 
 export const Location: React.FC = () => {
   return (
-    <section id="location" className="py-24 md:py-32 px-6 md:px-12 bg-stone-950 border-t border-stone-900 relative">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24">
+    <section id="location" className="py-24 md:py-32 px-6 md:px-12 bg-stone-950 border-t border-stone-900 relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-900/30 via-stone-950 to-stone-950 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 relative z-10">
 
         {/* Map Container */}
         <motion.div
@@ -13,10 +16,10 @@ export const Location: React.FC = () => {
           whileInView={{ opacity: 1, filter: 'blur(0px)' }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
-          className="w-full md:w-1/2 aspect-square md:aspect-[4/5] bg-stone-900 relative overflow-hidden shadow-2xl"
+          className="w-full md:w-1/2 aspect-square md:aspect-[4/5] bg-stone-900 relative overflow-hidden shadow-2xl pointer-events-none"
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30596073366!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1647043276541!5m2!1sen!2s"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113941.05389601666!2d-65.28911674251214!3d-26.832791656885662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94223792d6c56903%3A0xf88d5b8801e06fa5!2sSan%20Miguel%20de%20Tucum%C3%A1n%2C%20Tucum%C3%A1n!5e0!3m2!1sen!2sar!4v1709668352654!5m2!1sen!2sar"
             width="100%"
             height="100%"
             style={{
@@ -28,14 +31,11 @@ export const Location: React.FC = () => {
             title="Noir Location"
           />
 
-          {/* Tactical Marker with Ripple Effect */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            {/* Ripple Animation */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-amber-700/20 rounded-full animate-ping" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-amber-700/10 rounded-full animate-ping [animation-delay:0.5s]" />
+          {/* Tactical Marker */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-5 h-5">
 
             {/* Pin Marker */}
-            <div className="relative w-5 h-5 bg-amber-700 rotate-45 border-2 border-stone-950 shadow-[0_0_20px_rgba(180,83,9,0.6)] animate-pulse">
+            <div className="absolute inset-0 bg-amber-700 rotate-45 border-2 border-stone-950 shadow-[0_0_20px_rgba(180,83,9,0.6)]">
               {/* Inner Glow */}
               <div className="absolute inset-1 bg-amber-400 rotate-0" />
             </div>
@@ -63,8 +63,8 @@ export const Location: React.FC = () => {
                 <div>
                   <h3 className="font-cinzel text-lg text-stone-300 mb-2">Dirección</h3>
                   <p className="font-body text-stone-500 font-light leading-relaxed">
-                    888 Shadow Avenue, <br />
-                    Midnight District, NY 10012
+                    25 de Mayo 432, 5to Piso, <br />
+                    San Miguel de Tucumán, T4000
                   </p>
                 </div>
               </div>
@@ -75,7 +75,7 @@ export const Location: React.FC = () => {
                   <h3 className="font-cinzel text-lg text-stone-300 mb-2">Horario</h3>
                   <p className="font-body text-stone-500 font-light leading-relaxed">
                     Martes — Domingo <br />
-                    18:00 — Cierre
+                    20:00 — Cierre
                   </p>
                 </div>
               </div>
@@ -85,8 +85,8 @@ export const Location: React.FC = () => {
                 <div>
                   <h3 className="font-cinzel text-lg text-stone-300 mb-2">Contacto</h3>
                   <p className="font-body text-stone-500 font-light leading-relaxed">
-                    +1 (555) 000-0000 <br />
-                    concierge@noirdining.com
+                    +54 9 381 000-0000 <br />
+                    reservas@noirdining.com.ar
                   </p>
                 </div>
               </div>

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Clock as ClockIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, isBefore, startOfDay } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 // API Simulation
 const submitReservation = async (data: any): Promise<void> => {
@@ -38,6 +41,85 @@ export const Reservations: React.FC = () => {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errors, setErrors] = useState<FormErrors>({});
   const [shake, setShake] = useState(false);
+
+  // Custom Picker State
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const availableTimes = ['20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+
+  const handleMonthChange = (direction: number) => {
+    setCurrentMonth(direction > 0 ? addMonths(currentMonth, 1) : subMonths(currentMonth, 1));
+  };
+
+  const handleDateSelect = (day: Date) => {
+    setFormData(prev => ({ ...prev, date: format(day, 'yyyy-MM-dd') }));
+    setIsDatePickerOpen(false);
+    if (errors.date) setErrors(prev => ({ ...prev, date: undefined }));
+  };
+
+  const handleTimeSelect = (time: string) => {
+    setFormData(prev => ({ ...prev, time }));
+    setIsTimePickerOpen(false);
+    if (errors.time) setErrors(prev => ({ ...prev, time: undefined }));
+  };
+
+  const renderCalendarDays = () => {
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
+    const dateFormat = "d";
+    const rows = [];
+
+    let days = [];
+    let day = startDate;
+    let formattedDate = "";
+    const today = startOfDay(new Date());
+
+    while (day <= endDate) {
+      for (let i = 0; i < 7; i++) {
+        formattedDate = format(day, dateFormat);
+        const cloneDay = day;
+        const isDisabled = isBefore(day, today);
+        const isSelected = formData.date === format(day, 'yyyy-MM-dd');
+
+        days.push(
+          <div
+            key={day.toString()}
+            onClick={() => !isDisabled && handleDateSelect(cloneDay)}
+            className={`p-2 text-center text-sm transition-colors ${!isSameMonth(day, monthStart) ? "text-stone-700 pointer-events-none" :
+              isDisabled ? "text-stone-600 cursor-not-allowed" :
+                isSelected ? "bg-amber-900/40 text-amber-100 font-bold" :
+                  "text-stone-300 hover:bg-stone-800 cursor-pointer"
+              }`}
+          >
+            {formattedDate}
+          </div>
+        );
+        day = addDays(day, 1);
+      }
+      rows.push(<React.Fragment key={day.toString()}>{days}</React.Fragment>);
+      days = [];
+    }
+    return rows;
+  };
+
+  // Close pickers on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.datepicker-container')) {
+        setIsDatePickerOpen(false);
+      }
+      if (!target.closest('.timepicker-container')) {
+        setIsTimePickerOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Clear errors when user types
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,8 +197,11 @@ export const Reservations: React.FC = () => {
   const hasContent = Object.values(formData).some(val => val !== '');
 
   return (
-    <section id="reservations" className="py-32 md:py-48 px-6 bg-stone-950 border-t border-stone-900/50 flex justify-center overflow-hidden min-h-[600px]">
-      <div className="max-w-5xl w-full relative flex flex-col justify-center">
+    <section id="reservations" className="py-32 md:py-48 px-6 bg-stone-950 border-t border-stone-900/50 flex justify-center relative overflow-hidden min-h-[600px]">
+      {/* Ambient background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-amber-950/20 via-stone-950 to-stone-950 pointer-events-none" />
+
+      <div className="max-w-5xl w-full relative flex flex-col justify-center z-10">
 
         {/* Decorative background text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none select-none opacity-[0.03]">
@@ -164,16 +249,49 @@ export const Reservations: React.FC = () => {
 
                   <span> personas<span className="text-rose-900 ml-1 text-sm align-top">*</span>, el día </span>
 
-                  {/* Date Input */}
+                  {/* Custom Date Picker */}
                   <div className="inline-flex flex-col align-baseline mx-2 relative top-2">
-                    <input
-                      type="date"
-                      name="date"
-                      value={formData.date}
-                      onChange={handleChange}
-                      disabled={isSubmitting}
-                      className="w-32 md:w-56 bg-transparent border-b border-stone-700 text-stone-100 text-center focus:border-amber-700 focus:outline-none transition-colors placeholder:text-stone-800 font-normal appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full rounded-none py-1"
-                    />
+                    <div className="relative w-48 md:w-64">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsDatePickerOpen(!isDatePickerOpen);
+                          setIsTimePickerOpen(false);
+                        }}
+                        disabled={isSubmitting}
+                        className="w-full bg-transparent border-b border-stone-700 text-stone-100 text-center focus:border-amber-700 focus:outline-none transition-colors font-normal py-1 pr-6 cursor-pointer flex justify-between items-center"
+                      >
+                        <span className="truncate">{formData.date ? format(new Date(formData.date + 'T12:00:00'), "dd 'de' MMMM", { locale: es }) : 'dd/mm/aaaa'}</span>
+                        <Calendar size={16} className="text-stone-500 absolute right-0" />
+                      </button>
+
+                      <AnimatePresence>
+                        {isDatePickerOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-stone-900 border border-stone-800 shadow-2xl z-50 p-4"
+                          >
+                            <div className="flex justify-between items-center mb-4">
+                              <button type="button" onClick={() => handleMonthChange(-1)} className="text-stone-400 hover:text-white"><ChevronLeft size={20} /></button>
+                              <span className="font-cinzel text-stone-200 capitalize text-sm">
+                                {format(currentMonth, "MMMM yyyy", { locale: es })}
+                              </span>
+                              <button type="button" onClick={() => handleMonthChange(1)} className="text-stone-400 hover:text-white"><ChevronRight size={20} /></button>
+                            </div>
+                            <div className="grid grid-cols-7 gap-1 mb-2">
+                              {['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'].map(day => (
+                                <div key={day} className="text-center font-body text-[10px] text-stone-500">{day}</div>
+                              ))}
+                            </div>
+                            <div className="grid grid-cols-7 gap-1">
+                              {renderCalendarDays()}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                     <div className="h-4 mt-1">
                       {errors.date && <span className="text-[10px] text-rose-900 font-body uppercase tracking-wider block whitespace-nowrap">{errors.date}</span>}
                     </div>
@@ -181,16 +299,44 @@ export const Reservations: React.FC = () => {
 
                   <span> a las </span>
 
-                  {/* Time Input */}
+                  {/* Custom Time Picker */}
                   <div className="inline-flex flex-col align-baseline mx-2 relative top-2">
-                    <input
-                      type="time"
-                      name="time"
-                      value={formData.time}
-                      onChange={handleChange}
-                      disabled={isSubmitting}
-                      className="w-24 md:w-36 bg-transparent border-b border-stone-700 text-stone-100 text-center focus:border-amber-700 focus:outline-none transition-colors placeholder:text-stone-800 font-normal appearance-none [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full rounded-none py-1"
-                    />
+                    <div className="relative w-40 md:w-48">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsTimePickerOpen(!isTimePickerOpen);
+                          setIsDatePickerOpen(false);
+                        }}
+                        disabled={isSubmitting}
+                        className="w-full bg-transparent border-b border-stone-700 text-stone-100 text-center focus:border-amber-700 focus:outline-none transition-colors font-normal py-1 pr-6 cursor-pointer flex justify-between items-center"
+                      >
+                        <span className="truncate">{formData.time || '--:--'}</span>
+                        <ClockIcon size={16} className="text-stone-500 absolute right-0" />
+                      </button>
+
+                      <AnimatePresence>
+                        {isTimePickerOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-40 bg-stone-900 border border-stone-800 shadow-2xl z-50 max-h-48 overflow-y-auto scrollbar-hide"
+                          >
+                            {availableTimes.map(time => (
+                              <button
+                                key={time}
+                                type="button"
+                                onClick={() => handleTimeSelect(time)}
+                                className={`w-full text-center py-2 text-sm font-body transition-colors ${formData.time === time ? 'bg-amber-900/40 text-amber-100' : 'text-stone-400 hover:bg-stone-800 hover:text-white'}`}
+                              >
+                                {time}
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                     <div className="h-4 mt-1">
                       {errors.time && <span className="text-[10px] text-rose-900 font-body uppercase tracking-wider block whitespace-nowrap">{errors.time}</span>}
                     </div>
@@ -207,7 +353,7 @@ export const Reservations: React.FC = () => {
                       onChange={handleChange}
                       placeholder="Tu Nombre"
                       disabled={isSubmitting}
-                      className="w-48 md:w-80 bg-transparent border-b border-stone-700 text-stone-100 text-center focus:border-amber-700 focus:outline-none transition-colors placeholder:text-stone-800 font-normal rounded-none py-1"
+                      className="w-48 md:w-80 bg-transparent border-b border-stone-700 text-stone-100 text-center font-display italic focus:border-amber-700 focus:outline-none transition-colors placeholder:text-stone-800 rounded-none py-1"
                     />
                     <div className="h-4 mt-1">
                       {errors.name && <span className="text-[10px] text-rose-900 font-body uppercase tracking-wider block whitespace-nowrap">{errors.name}</span>}
@@ -216,8 +362,8 @@ export const Reservations: React.FC = () => {
 
                   <span><span className="text-rose-900 ml-0.5 text-sm align-top">*</span> y mi email es </span>
 
-                  {/* Email Input - NEW */}
-                  <div className="inline-flex flex-col align-baseline mx-2 relative top-2">
+                  {/* Email Input */}
+                  <div className="inline-flex flex-col align-baseline mx-2 relative top-2 text-left">
                     <input
                       type="email"
                       name="email"
@@ -225,9 +371,9 @@ export const Reservations: React.FC = () => {
                       onChange={handleChange}
                       placeholder="tu@email.com"
                       disabled={isSubmitting}
-                      className="w-48 md:w-80 bg-transparent border-b border-stone-700 text-stone-100 text-center focus:border-amber-700 focus:outline-none transition-colors placeholder:text-stone-800 font-normal rounded-none py-1"
+                      className="w-80 md:w-[28rem] bg-transparent border-b border-stone-700 text-stone-100 text-center font-display italic focus:border-amber-700 focus:outline-none transition-colors placeholder:text-stone-800 rounded-none py-1 block mx-auto"
                     />
-                    <div className="h-4 mt-1">
+                    <div className="h-4 mt-1 text-center">
                       {errors.email && <span className="text-[10px] text-rose-900 font-body uppercase tracking-wider block whitespace-nowrap">{errors.email}</span>}
                     </div>
                   </div>

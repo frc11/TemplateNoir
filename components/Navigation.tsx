@@ -92,7 +92,7 @@ export const Navigation: React.FC = () => {
                 { label: 'Historia', id: 'story' },
                 { label: 'Carta', id: 'menu' },
                 { label: 'Ubicación', id: 'location' },
-                { label: 'Reservas', id: 'reservations' }
+                { label: 'Preguntas Frecuentes', id: 'faq' }
               ].map((item) => (
                 <motion.a
                   key={item.label}

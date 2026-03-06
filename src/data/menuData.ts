@@ -27,7 +27,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Atún rojo, sésamo negro, yema curada en soja añeja y aire de wasabi.',
         price: '26',
         category: 'Appetizers',
-        image: 'https://images.unsplash.com/photo-1546272989-40c92939c6c2?q=80&w=1200&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1200&auto=format&fit=crop', // raw tuna/sushi focused
         tags: ['gluten-free']
     },
     {
@@ -36,7 +36,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Esfera de foie gras micuit cubierta de avellanas tostadas y oro comestible.',
         price: '32',
         category: 'Appetizers',
-        image: 'https://images.unsplash.com/photo-1647427060118-4a1604a18b20?q=80&w=1200&auto=format&fit=crop'
+        image: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop' // keeping a premium meat/bone marrow look as a placeholder or using a dark truffle look:
     },
 
     // Main Courses
@@ -72,7 +72,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Costillar de cordero en costra de café, puré de berenjena quemada y menta.',
         price: '54',
         category: 'Main Courses',
-        image: 'https://images.unsplash.com/photo-1629853926618-249051fb86e3?q=80&w=1200&auto=format&fit=crop'
+        image: 'https://images.unsplash.com/photo-1628294895950-9805252327bc?q=80&w=1200&auto=format&fit=crop' // premium rack of lamb
     },
 
     // From the Fire
@@ -91,7 +91,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Corte de 1.2kg madurado 60 días, terminado en mesa con romero y fuego.',
         price: '145',
         category: 'From the Fire',
-        image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=1200&auto=format&fit=crop'
+        image: 'https://images.unsplash.com/photo-1594046243098-0fceea9d451e?q=80&w=1200&auto=format&fit=crop' // premium steak on dark background
     },
     {
         id: 'fire-3',
@@ -117,7 +117,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Domo de chocolate 85%, mousse de avellana, interior de maracuyá.',
         price: '22',
         category: 'Desserts',
-        image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?q=80&w=1200&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2?q=80&w=1200&auto=format&fit=crop', // dark rich chocolate cake
         tags: ['signature', 'gluten-free']
     },
     {
@@ -134,7 +134,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Láminas finas de manzana, caramelo salado, helado de vainilla ahumada.',
         price: '18',
         category: 'Desserts',
-        image: 'https://images.unsplash.com/photo-1639587425479-0524773c242a?q=80&w=1200&auto=format&fit=crop'
+        image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=1200&auto=format&fit=crop' // elegant apple dessert
     },
     {
         id: 'dessert-4',
@@ -153,7 +153,7 @@ export const MENU_DATA: MenuItem[] = [
         description: 'Vodka negro, licor de café, espresso, humo de canela.',
         price: '18',
         category: 'Cocktails',
-        image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1200&auto=format&fit=crop'
+        image: 'https://images.unsplash.com/photo-1601002242099-e68598a3e791?q=80&w=1200&auto=format&fit=crop'
     },
     {
         id: 'cocktail-2',

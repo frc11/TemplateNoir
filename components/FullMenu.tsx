@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronDown } from 'lucide-react';
 import { MENU_DATA, MENU_CATEGORIES } from '../src/data/menuData';
@@ -21,9 +22,14 @@ const FILTERS: { label: string; value: FilterType }[] = [
 ];
 
 export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
+    const [mounted, setMounted] = useState(false);
     const [activeImage, setActiveImage] = useState<string>(DEFAULT_IMAGE);
     const [activeFilter, setActiveFilter] = useState<FilterType>('all');
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
     const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
     // Accessibility: Focus Trap
@@ -121,7 +127,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
         }
     };
 
-    return (
+    const content = (
         <AnimatePresence>
             {isOpen && (
                 <motion.div
@@ -130,23 +136,23 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-                    className="fixed inset-0 z-50 bg-stone-950 flex flex-col md:flex-row h-screen outline-none"
+                    className="fixed inset-0 z-[999] bg-stone-950 flex flex-col md:flex-row h-screen outline-none"
                     tabIndex={-1}
                 >
-                    {/* Close Button - Fixed */}
-                    <button
-                        onClick={onClose}
-                        className="fixed top-6 right-6 z-[60] p-2 text-stone-400 hover:text-white transition-colors duration-300 mix-blend-difference"
-                    >
-                        <X size={32} strokeWidth={1} />
-                    </button>
-
                     {/* LEFT COLUMN - SCROLLABLE LIST */}
                     <div
                         ref={scrollRef}
                         className="w-full md:w-[45%] h-full overflow-y-auto relative z-10 bg-stone-950/95 backdrop-blur-md md:bg-stone-950 
                        [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
                     >
+                        {/* Close Button - Moved to the right edge of this column */}
+                        <button
+                            onClick={onClose}
+                            className="absolute top-6 right-6 z-[60] p-2 text-stone-500 hover:text-white transition-colors duration-300"
+                        >
+                            <X size={32} strokeWidth={1} />
+                        </button>
+
                         <div className="p-8 md:p-16 lg:p-20 min-h-screen pb-48">
                             <motion.div
                                 initial={{ y: 20, opacity: 0 }}
@@ -263,7 +269,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                     exit={{ opacity: 0 }}
                                     className="fixed bottom-8 left-8 md:left-16 z-30 pointer-events-none flex flex-col items-center gap-2 text-stone-600/50"
                                 >
-                                    <span className="text-[10px] tracking-widest uppercase writing-vertical-rl rotate-180">Scroll</span>
+                                    <span className="text-[10px] tracking-widest uppercase [writing-mode:vertical-rl]">Scroll</span>
                                     <ChevronDown size={14} className="animate-bounce" />
                                 </motion.div>
                             )}
@@ -297,4 +303,8 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
             )}
         </AnimatePresence>
     );
+
+    if (!mounted) return null;
+
+    return createPortal(content, document.body);
 };

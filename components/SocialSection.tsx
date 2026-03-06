@@ -1,24 +1,26 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MoreHorizontal, ChevronLeft, Heart, Grid, Search, Clapperboard, User, BadgeCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MoreHorizontal, ChevronLeft, Heart, Grid, Search, Clapperboard, User, BadgeCheck, X } from 'lucide-react';
 
 const INSTAGRAM_POSTS = [
-    { id: 1, url: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop", likes: "1.2K" },
-    { id: 2, url: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=600&auto=format&fit=crop", likes: "856" },
-    { id: 3, url: "https://images.unsplash.com/photo-1625938146369-adc83368bda7?q=80&w=600&auto=format&fit=crop", likes: "2.1K" },
-    { id: 4, url: "https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=600&auto=format&fit=crop", likes: "3.4K" },
-    { id: 5, url: "https://images.unsplash.com/photo-1544025162-d7669d26d30e?q=80&w=600&auto=format&fit=crop", likes: "920" },
-    { id: 6, url: "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=600&auto=format&fit=crop", likes: "1.5K" },
-    { id: 7, url: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=600&auto=format&fit=crop", likes: "4.1K" },
-    { id: 8, url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop", likes: "2.8K" },
-    { id: 9, url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop", likes: "1.9K" },
+    { id: 1, url: "/wagyu.png", likes: "1.2K" },
+    { id: 2, url: "/obsidian_truffle.png", likes: "856" },
+    { id: 3, url: "/venison_ashes.png", likes: "2.1K" },
+    { id: 4, url: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?q=80&w=600&auto=format&fit=crop", likes: "3.4K" },
+    { id: 5, url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop", likes: "920" },
+    { id: 6, url: "/hero-bg.png", likes: "1.5K" },
+    { id: 7, url: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=600&auto=format&fit=crop", likes: "4.1K" },
+    { id: 8, url: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop", likes: "2.8K" },
+    { id: 9, url: "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=600&auto=format&fit=crop", likes: "1.9K" },
 ];
 
 export const SocialSection: React.FC = () => {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
     return (
         <section className="py-32 bg-stone-950 flex flex-col items-center relative overflow-hidden">
-            {/* Background Elements */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-amber-900/5 rounded-full blur-[120px] pointer-events-none" />
+            {/* Background Ambience - Smooth Gradient without banding */}
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/10 via-stone-950 to-stone-950 pointer-events-none -z-10" />
 
             {/* Section Title */}
             <div className="text-center mb-16 relative z-10 px-4">
@@ -118,12 +120,16 @@ export const SocialSection: React.FC = () => {
                     </div>
 
                     {/* Photo Grid */}
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide bg-black">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide bg-black relative">
                         <div className="grid grid-cols-3 gap-0.5">
                             {INSTAGRAM_POSTS.map((post) => (
-                                <div key={post.id} className="aspect-square relative group cursor-pointer bg-stone-900">
+                                <div
+                                    key={post.id}
+                                    className="aspect-square relative group cursor-pointer bg-stone-900"
+                                    onClick={() => setSelectedImage(post.url)}
+                                >
                                     <img src={post.url} alt="Feed Post" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" loading="lazy" />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-1">
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-1 pointer-events-none">
                                         <Heart size={16} fill="white" className="text-white" />
                                         <span className="text-white text-xs font-bold">{post.likes}</span>
                                     </div>
@@ -148,6 +154,37 @@ export const SocialSection: React.FC = () => {
 
                 </div>
             </motion.div>
+
+            {/* Fullscreen Image Lightbox Modal */}
+            <AnimatePresence>
+                {selectedImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 md:p-12 cursor-zoom-out"
+                    >
+                        <button
+                            onClick={() => setSelectedImage(null)}
+                            className="absolute top-6 right-6 text-stone-400 hover:text-white transition-colors z-[110]"
+                        >
+                            <X size={32} />
+                        </button>
+
+                        <motion.img
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            src={selectedImage}
+                            alt="Enlarged Post"
+                            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl ring-1 ring-stone-800"
+                            onClick={(e) => e.stopPropagation()} // Prevent click from closing when clicking the image itself
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };
