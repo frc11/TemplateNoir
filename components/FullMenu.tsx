@@ -228,7 +228,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                             </motion.div>
 
                             {/* MENU CATEGORIES */}
-                            <motion.div layout className="space-y-20 md:space-y-32">
+                            <motion.div layout="position" className="space-y-20 md:space-y-32">
                                 <AnimatePresence mode="popLayout">
                                     {MENU_CATEGORIES.map((category) => {
                                         const categoryItems = filteredItems.filter(item => item.category === category);
@@ -237,7 +237,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                         return (
                                             <motion.div
                                                 key={category}
-                                                layout
+                                                layout="position"
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: -20 }}
@@ -256,7 +256,7 @@ export const FullMenu: React.FC<FullMenuProps> = ({ isOpen, onClose }) => {
                                                         {categoryItems.map((item) => (
                                                             <motion.div
                                                                 key={item.id}
-                                                                layout
+                                                                layout="position"
                                                                 variants={itemVariants}
                                                                 initial="hidden"
                                                                 animate="show"
